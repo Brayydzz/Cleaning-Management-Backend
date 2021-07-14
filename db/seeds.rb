@@ -35,7 +35,7 @@ service3.bookings.create(first_name: "Al", last_name: "Coholic", email: "al@coho
                          body: "Looking for a half day clean before my missus gets back next week", phone_number: "0499999999")
 service3.bookings.create(first_name: "Seymour", last_name: "Butz", email: "seymour@butz.com",
                          body: "I want a half day clean every Wednesday ongoing. Between 12pm and 4pm",
-                          phone_number: "0412345678")
+                         phone_number: "0412345678")
 
 # booking
 # first_name: string

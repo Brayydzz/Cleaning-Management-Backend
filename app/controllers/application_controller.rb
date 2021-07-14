@@ -1,11 +1,11 @@
 class ApplicationController < ActionController::API
   def decoded_token
-    token = request.authorization.split(" ")[1]
+    token = request.authorization.split[1]
     if token
       begin
-        return JWT.decode(token, "my$ecretK3y", true, algorithm: "HS256")
+        JWT.decode(token, "my$ecretK3y", true, algorithm: "HS256")
       rescue JWT::DecodeError
-        return nil
+        nil
       end
     end
   end
@@ -22,12 +22,10 @@ class ApplicationController < ActionController::API
   end
 
   def isAdmin?
-    return @user.isAdmin
+    @user.isAdmin
   end
 
   def authorized
-    if (!logged_in?)
-      render json: { error: "You must be logged in to do this!" }, status: :unauthorized
-    end
+    render json: { error: "You must be logged in to do this!" }, status: :unauthorized unless logged_in?
   end
 end

@@ -1,5 +1,5 @@
 class ServiceTypesController < ApplicationController
-  before_action :set_service_type, only: [:show, :update, :destroy]
+  before_action :set_service_type, only: %i[show update destroy]
 
   # GET /service_types
   def index
@@ -39,13 +39,14 @@ class ServiceTypesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_service_type
-      @service_type = ServiceType.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def service_type_params
-      params.require(:service_type).permit(:name)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_service_type
+    @service_type = ServiceType.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def service_type_params
+    params.require(:service_type).permit(:name)
+  end
 end
