@@ -12,7 +12,8 @@ class ContactInformationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create contact_information" do
     assert_difference('ContactInformation.count') do
-      post contact_informations_url, params: { contact_information: { address_id: @contact_information.address_id, first_name: @contact_information.first_name, last_name: @contact_information.last_name, phone_number: @contact_information.phone_number } }, as: :json
+      post contact_informations_url,
+           params: { contact_information: { address_id: @contact_information.address_id, first_name: @contact_information.first_name, last_name: @contact_information.last_name, phone_number: @contact_information.phone_number } }, as: :json
     end
 
     assert_response 201
@@ -24,7 +25,8 @@ class ContactInformationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update contact_information" do
-    patch contact_information_url(@contact_information), params: { contact_information: { address_id: @contact_information.address_id, first_name: @contact_information.first_name, last_name: @contact_information.last_name, phone_number: @contact_information.phone_number } }, as: :json
+    patch contact_information_url(@contact_information),
+          params: { contact_information: { address_id: @contact_information.address_id, first_name: @contact_information.first_name, last_name: @contact_information.last_name, phone_number: @contact_information.phone_number } }, as: :json
     assert_response 200
   end
 
