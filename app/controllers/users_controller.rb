@@ -40,7 +40,7 @@ class UsersController < ApplicationController
     end
     # Authenticate user
     if user.authenticate(user_params[:password])
-      payload = { name: user[:name], email: user[:email], user_id: user[:id] }
+      payload = { first_name: user.contact_information[:first_name], last_name: user.contact_information[:last_name], email: user[:email], user_id: user[:id], isAdmin: user[:isAdmin] }
       token = JWT.encode payload, "my$ecretK3y", "HS256"
       render json: { token: token }
       nil
