@@ -59,7 +59,7 @@ class UsersController < ApplicationController
 
     # Create contact Info
     contactInfo = ContactInformation.new(first_name: user_params[:first_name], last_name: user_params[:last_name],
-                                         phone_number: user_params[:phone_number])
+                                         phone_number: user_params[:phone_number], email: params[:email])
     contactInfo.address_id = address.id
     contactInfo.save
 
