@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
+  before_action :authorized, except: [:login, :signup]
 
   # GET /users
   def index
@@ -11,17 +12,6 @@ class UsersController < ApplicationController
   # GET /users/1
   def show
     render json: @user
-  end
-
-  # POST /users
-  def create
-    @user = User.new(user_params)
-
-    if @user.save
-      render json: @user, status: :created, location: @user
-    else
-      render json: @user.errors, status: :unprocessable_entity
-    end
   end
 
   # PATCH/PUT /users/1
@@ -61,6 +51,24 @@ class UsersController < ApplicationController
 
   # POST /signup
   def signup
+    user = User.new(email: user_params[:email], password: user_params[:password])
+    user.isAdmin = false
+    # Create Address
+    address = Address.create!(street_address: user_params[:street_address], street_number: user_params[:street_number], suburb: user_params[:suburb], state: user_params[:state], postcode: user_params[:postcode])
+
+    #Create contact Info
+    contactInfo = ContactInformation.new(first_name: user_params[:first_name], last_name: user_params[:last_name], phone_number: user_params[:phone_number])
+    contactInfo.address_id = address.id
+    contactInfo.save
+
+    # Add Contact Information to user
+    user.contact_information_id = contactInfo.id
+
+    if user.save
+      render json: user, status: :created, location: user
+    else
+      render json: user.errors, status: :unprocessable_entity
+    end
   end
 
   private
@@ -72,6 +80,6 @@ class UsersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def user_params
-    params.require(:user).permit(:email, :password, :contact_information_id, :isAdmin)
+    params.permit(:email, :password, :first_name, :last_name, :phone_number, :street_number, :street_address, :unit_number, :suburb, :state, :postcode)
   end
 end
