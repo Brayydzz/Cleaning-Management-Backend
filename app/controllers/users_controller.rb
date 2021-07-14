@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :update, :destroy]
-  before_action :authorized, except: [:login, :signup]
+  before_action :set_user, only: %i[show update destroy]
+  before_action :authorized, except: %i[login signup]
 
   # GET /users
   def index
@@ -34,16 +34,16 @@ class UsersController < ApplicationController
     user = User.find_by_email(user_params[:email])
 
     # Check if user is valid (Email matches in the database)
-    if (!user)
+    unless user
       render json: { error: "Username and password don't match" }
       return
     end
     # Authenticate user
-    if (user.authenticate(user_params[:password]))
+    if user.authenticate(user_params[:password])
       payload = { name: user[:name], email: user[:email], user_id: user[:id] }
       token = JWT.encode payload, "my$ecretK3y", "HS256"
       render json: { token: token }
-      return
+      nil
     else
       render json: { error: "Username and password don't match" }
     end
@@ -54,10 +54,12 @@ class UsersController < ApplicationController
     user = User.new(email: user_params[:email], password: user_params[:password])
     user.isAdmin = false
     # Create Address
-    address = Address.create!(street_address: user_params[:street_address], street_number: user_params[:street_number], suburb: user_params[:suburb], state: user_params[:state], postcode: user_params[:postcode])
+    address = Address.create!(street_address: user_params[:street_address], street_number: user_params[:street_number],
+                              suburb: user_params[:suburb], state: user_params[:state], postcode: user_params[:postcode])
 
-    #Create contact Info
-    contactInfo = ContactInformation.new(first_name: user_params[:first_name], last_name: user_params[:last_name], phone_number: user_params[:phone_number])
+    # Create contact Info
+    contactInfo = ContactInformation.new(first_name: user_params[:first_name], last_name: user_params[:last_name],
+                                         phone_number: user_params[:phone_number])
     contactInfo.address_id = address.id
     contactInfo.save
 
@@ -80,6 +82,7 @@ class UsersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def user_params
-    params.permit(:email, :password, :first_name, :last_name, :phone_number, :street_number, :street_address, :unit_number, :suburb, :state, :postcode)
+    params.permit(:email, :password, :first_name, :last_name, :phone_number, :street_number, :street_address,
+                  :unit_number, :suburb, :state, :postcode)
   end
 end
