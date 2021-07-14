@@ -9,14 +9,13 @@
 ServiceType.destroy_all
 User.destroy_all
 
-address1 = Address.create(street_number: "1", street_address: "Fake rd", suburb: "Brisbane", state: "QLD", postcode: "4000")
+address1 = Address.create(street_number: "1", street_address: "Fake rd", suburb: "Brisbane", state: "QLD",
+                          postcode: "4000")
 
+contactInfo = ContactInformation.create(phone_number: "04987654", email: "blah@blah.com", first_name: "Bob",
+                                        last_name: "Jones", address_id: address1.id)
 
-contactInfo = ContactInformation.create(phone_number: "04987654", email: "blah@blah.com", first_name: "Bob", last_name: "Jones", address_id: address1.id)
-
-
-
-user1 = User.create(email: "a@b.com", password:"password", isAdmin: true, contact_information_id: contactInfo.id)
+user1 = User.create(email: "a@b.com", password: "password", isAdmin: true, contact_information_id: contactInfo.id)
 # user2 = User.create(email: "foo@bar.com", password:"password", isAdmin: false)
 # user3 = User.create(email: "james@perrin.com", password:"password", isAdmin: false)
 # user4 = User.create(email: "dane@thomson.com", password:"password", isAdmin: false)
