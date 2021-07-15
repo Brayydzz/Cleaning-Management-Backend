@@ -25,6 +25,10 @@ class ApplicationController < ActionController::API
     @user.isAdmin
   end
 
+  def authorizedAdmin
+    render json: { error: "You must have admin role to do this!" }, status: :unauthorized unless isAdmin?
+  end
+
   def authorized
     render json: { error: "You must be logged in to do this!" }, status: :unauthorized unless logged_in?
   end
