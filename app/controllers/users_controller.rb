@@ -58,17 +58,42 @@ class UsersController < ApplicationController
     end
   end
 
+  # Check if Address already exists, if it does then return it
+  def checkAddress
+    address = Address.where(street_address: user_params[:street_address], street_number: user_params[:street_number],
+                            suburb: user_params[:suburb], state: user_params[:state], postcode: user_params[:postcode]).first
+    return address
+  end
+
+  # Check if ContactInformation already exists, if it does then return it
+  def checkContactInformation
+    contactInfo = ContactInformation.where(first_name: user_params[:first_name], last_name: user_params[:last_name],
+                                           phone_number: user_params[:phone_number], email: params[:email]).first
+    return contactInfo
+  end
+
   # POST /signup
   def signup
     user = User.new(email: user_params[:email], password: user_params[:password])
     user.isAdmin = false
     # Create Address
-    address = Address.create(street_address: user_params[:street_address], street_number: user_params[:street_number],
-                             suburb: user_params[:suburb], state: user_params[:state], postcode: user_params[:postcode])
+    if !checkAddress
+      address = Address.create(street_address: user_params[:street_address], street_number: user_params[:street_number],
+                               suburb: user_params[:suburb], state: user_params[:state], postcode: user_params[:postcode])
+    else
+      address = checkAddress()
+    end
 
+    puts checkAddress(), "********************"
     # Create contact Info
-    contactInfo = ContactInformation.new(first_name: user_params[:first_name], last_name: user_params[:last_name],
-                                         phone_number: user_params[:phone_number], email: params[:email])
+    if !checkContactInformation
+      contactInfo = ContactInformation.new(first_name: user_params[:first_name], last_name: user_params[:last_name],
+                                           phone_number: user_params[:phone_number], email: params[:email])
+    else
+      contactInfo = checkContactInformation()
+    end
+
+    puts address, "***********"
     contactInfo.address_id = address.id
     contactInfo.save
 
@@ -87,9 +112,6 @@ class UsersController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_user
     @user = User.find(params[:id])
-    # @user = { user: { user: user,
-    #                  contact_information: user.contact_information,
-    #                  address: user.contact_information.address } }
   end
 
   # Only allow a list of trusted parameters through.
