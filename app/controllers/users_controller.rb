@@ -1,17 +1,26 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[show update destroy]
-  before_action :authorized, except: %i[login signup]
+  before_action :authorized, except: %i[login]
+  before_action :authorizedAdmin, only: [:index, :destroy, :signup]
+  before_action :set_user, only: %i[update destroy]
 
   # GET /users
   def index
-    @users = User.all
+    all_users = User.eager_load(:contact_information)
 
-    render json: @users
+    users = all_users.map do |user|
+      { user: { user: user.api_friendly,
+               contact_information: user.contact_information.api_friendly,
+               address: user.contact_information.address.api_friendly } }
+    end
+
+    render json: users
   end
 
   # GET /users/1
   def show
-    render json: @user
+    render json: { user: { user: @user.api_friendly,
+                          contact_information: @user.contact_information.api_friendly,
+                          address: @user.contact_information.address.api_friendly } }
   end
 
   # PATCH/PUT /users/1
@@ -54,8 +63,8 @@ class UsersController < ApplicationController
     user = User.new(email: user_params[:email], password: user_params[:password])
     user.isAdmin = false
     # Create Address
-    address = Address.create!(street_address: user_params[:street_address], street_number: user_params[:street_number],
-                              suburb: user_params[:suburb], state: user_params[:state], postcode: user_params[:postcode])
+    address = Address.create(street_address: user_params[:street_address], street_number: user_params[:street_number],
+                             suburb: user_params[:suburb], state: user_params[:state], postcode: user_params[:postcode])
 
     # Create contact Info
     contactInfo = ContactInformation.new(first_name: user_params[:first_name], last_name: user_params[:last_name],
@@ -78,6 +87,9 @@ class UsersController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_user
     @user = User.find(params[:id])
+    # @user = { user: { user: user,
+    #                  contact_information: user.contact_information,
+    #                  address: user.contact_information.address } }
   end
 
   # Only allow a list of trusted parameters through.
