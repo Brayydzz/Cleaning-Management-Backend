@@ -84,7 +84,6 @@ class UsersController < ApplicationController
       address = checkAddress()
     end
 
-    puts checkAddress(), "********************"
     # Create contact Info
     if !checkContactInformation
       contactInfo = ContactInformation.new(first_name: user_params[:first_name], last_name: user_params[:last_name],
@@ -93,7 +92,6 @@ class UsersController < ApplicationController
       contactInfo = checkContactInformation()
     end
 
-    puts address, "***********"
     contactInfo.address_id = address.id
     contactInfo.save
 
