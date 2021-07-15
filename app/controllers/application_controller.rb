@@ -21,12 +21,16 @@ class ApplicationController < ActionController::API
     !!logged_in_user
   end
 
-  def isAdmin?
-    @user.isAdmin
+  def is_admin?
+    if logged_in?
+      @user.isAdmin
+    else
+      false
+    end
   end
 
   def authorizedAdmin
-    render json: { error: "You must have admin role to do this!" }, status: :unauthorized unless isAdmin?
+    render json: { error: "You must have admin role to do this!" }, status: :unauthorized unless is_admin?
   end
 
   def authorized
