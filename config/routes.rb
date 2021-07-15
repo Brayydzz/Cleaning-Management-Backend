@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   resources :contact_informations
   resources :addresses
   resources :bookings, only: [:index, :create, :destroy]
-  resources :service_types
+  resources :service_types, only: [:show]
 
   post "/signup", to: "users#signup"
   post "/login", to: "users#login"
