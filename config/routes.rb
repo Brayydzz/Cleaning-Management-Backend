@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   resources :users
   resources :contact_informations
   resources :addresses
-  resources :bookings
+  resources :bookings, only: [:index, :create, :destroy]
   resources :service_types
 
   post "/signup", to: "users#signup"
