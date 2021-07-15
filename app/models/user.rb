@@ -4,4 +4,10 @@ class User < ApplicationRecord
   validates :email, presence: true
   validates :email, uniqueness: true
   validates :password, presence: true
+
+  def api_friendly
+    return {
+             id: id, email: email, is_admin: isAdmin,
+           }
+  end
 end
