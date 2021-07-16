@@ -4,8 +4,10 @@ class Address < ApplicationRecord
   validates :street_address, :street_number, :postcode, :suburb, :state, :postcode, presence: true
 
   def api_friendly
-    return {
-             id: id, street_number: street_number, street_address: street_address, unit_number: unit_number, suburb: suburb, state: state, postcode: postcode,
-           }
+    if unit_number
+      return "#{unit_number}/ #{street_number} #{street_address}, #{suburb}, #{postcode}, #{state}"
+    else
+      return "#{street_number}, #{street_address}, #{suburb}, #{postcode}, #{state}"
+    end
   end
 end
