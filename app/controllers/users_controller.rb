@@ -22,10 +22,19 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   def update
     if (@user.id == logged_in_user.id)
-      if @user.update(password: user_params[:password], contact_information_id: checkContactInformation(user_params).id)
-        render json: @user.serialize
+      puts user_params[:password], " **************** "
+      if (user_params[:password])
+        if @user.update(password: user_params[:password], contact_information_id: checkContactInformation(user_params).id)
+          render json: @user.serialize
+        else
+          render json: @user.errors, status: :unprocessable_entity
+        end
       else
-        render json: @user.errors, status: :unprocessable_entity
+        if @user.update_attribute(:contact_information_id, checkContactInformation(user_params).id)
+          render json: @user.serialize
+        else
+          render json: @user.errors, status: :unprocessable_entity
+        end
       end
     else
       render json: { error: "You are not the owner of this account!" }
