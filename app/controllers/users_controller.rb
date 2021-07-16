@@ -76,7 +76,7 @@ class UsersController < ApplicationController
                                address: user.contact_information.address.api_friendly } }
       render json: response, status: :created, location: response
     else
-      render json: user.errors, status: :unprocessable_entity
+      render json: { error: user.errors }, status: :unprocessable_entity
     end
   end
 
