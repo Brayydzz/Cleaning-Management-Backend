@@ -12,6 +12,7 @@ class ClientsController < ApplicationController
         client: client,
         contact_information: client.contact_information.api_friendly,
         address: client.contact_information.address.api_friendly,
+        address_object: client.contact_information.address,
       } }
     end
     render json: clients
@@ -22,7 +23,8 @@ class ClientsController < ApplicationController
     client = { client_data: {
       client: @client,
       contact_information: @client.contact_information.api_friendly,
-      address: @client.contact_information.address.api_friendly,
+      address: client.contact_information.address.api_friendly,
+      address_object: @client.contact_information.address,
     } }
     render json: client
   end
@@ -37,6 +39,7 @@ class ClientsController < ApplicationController
         client: client,
         contact_information: client.contact_information.api_friendly,
         address: client.contact_information.address.api_friendly,
+        address_object: client.contact_information.address,
       } }
       render json: response, status: :created, location: response
     else

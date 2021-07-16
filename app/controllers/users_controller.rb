@@ -10,7 +10,8 @@ class UsersController < ApplicationController
     users = all_users.map do |user|
       { user_data: { user: user.api_friendly,
                     contact_information: user.contact_information.api_friendly,
-                    address: user.contact_information.address.api_friendly } }
+                    address: user.contact_information.address.api_friendly,
+                    address_object: user.contact_information.address } }
     end
 
     render json: users
@@ -20,14 +21,18 @@ class UsersController < ApplicationController
   def show
     render json: { user_data: { user: @user.api_friendly,
                                contact_information: @user.contact_information.api_friendly,
-                               address: @user.contact_information.address.api_friendly } }
+                               address: @user.contact_information.address.api_friendly,
+                               address_object: @user.contact_information.address } }
   end
 
   # PATCH/PUT /users/1
   def update
     if (@user.id == logged_in_user.id)
       if @user.update(password: user_params[:password], contact_information_id: checkContactInformation(user_params).id)
-        render json: @user
+        render json: { user_data: { user: @user.api_friendly,
+                                   contact_information: @user.contact_information.api_friendly,
+                                   address: @user.contact_information.address.api_friendly,
+                                   address_object: @user.contact_information.address } }
       else
         render json: @user.errors, status: :unprocessable_entity
       end
@@ -73,7 +78,8 @@ class UsersController < ApplicationController
     if user.save
       response = { user_data: { user: user.api_friendly,
                                contact_information: user.contact_information.api_friendly,
-                               address: user.contact_information.address.api_friendly } }
+                               address: user.contact_information.address.api_friendly,
+                               address_object: user.contact_information.address } }
       render json: response, status: :created, location: response
     else
       render json: { error: user.errors }, status: :unprocessable_entity
