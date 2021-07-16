@@ -33,7 +33,12 @@ class ClientsController < ApplicationController
     client.contact_information_id = checkContactInformation(client_params).id
 
     if client.save
-      render json: client, status: :created, location: client
+      response = { client_data: {
+        client: client,
+        contact_information: client.contact_information.api_friendly,
+        address: client.contact_information.address.api_friendly,
+      } }
+      render json: response, status: :created, location: response
     else
       render json: client.errors, status: :unprocessable_entity
     end
