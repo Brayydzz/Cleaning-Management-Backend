@@ -8,25 +8,14 @@ class ClientsController < ApplicationController
     all_clients = Client.eager_load(:contact_information)
 
     clients = all_clients.map do |client|
-      { client_data: {
-        client: client,
-        contact_information: client.contact_information.api_friendly,
-        address: client.contact_information.address.api_friendly,
-        address_object: client.contact_information.address,
-      } }
+      client.serialize
     end
     render json: clients
   end
 
   # GET /clients/1
   def show
-    client = { client_data: {
-      client: @client,
-      contact_information: @client.contact_information.api_friendly,
-      address: client.contact_information.address.api_friendly,
-      address_object: @client.contact_information.address,
-    } }
-    render json: client
+    render json: @client.serialize
   end
 
   # POST /clients
@@ -35,13 +24,7 @@ class ClientsController < ApplicationController
     client.contact_information_id = checkContactInformation(client_params).id
 
     if client.save
-      response = { client_data: {
-        client: client,
-        contact_information: client.contact_information.api_friendly,
-        address: client.contact_information.address.api_friendly,
-        address_object: client.contact_information.address,
-      } }
-      render json: response, status: :created, location: response
+      render json: client.serialize, status: :created, location: client.serialize
     else
       render json: client.errors, status: :unprocessable_entity
     end

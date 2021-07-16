@@ -8,10 +8,7 @@ class UsersController < ApplicationController
     all_users = User.eager_load(:contact_information)
 
     users = all_users.map do |user|
-      { user_data: { user: user.api_friendly,
-                    contact_information: user.contact_information.api_friendly,
-                    address: user.contact_information.address.api_friendly,
-                    address_object: user.contact_information.address } }
+      user.serialize
     end
 
     render json: users
@@ -19,20 +16,14 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
-    render json: { user_data: { user: @user.api_friendly,
-                               contact_information: @user.contact_information.api_friendly,
-                               address: @user.contact_information.address.api_friendly,
-                               address_object: @user.contact_information.address } }
+    render json: @user.serialize
   end
 
   # PATCH/PUT /users/1
   def update
     if (@user.id == logged_in_user.id)
       if @user.update(password: user_params[:password], contact_information_id: checkContactInformation(user_params).id)
-        render json: { user_data: { user: @user.api_friendly,
-                                   contact_information: @user.contact_information.api_friendly,
-                                   address: @user.contact_information.address.api_friendly,
-                                   address_object: @user.contact_information.address } }
+        render json: @user.serialize
       else
         render json: @user.errors, status: :unprocessable_entity
       end
@@ -76,11 +67,7 @@ class UsersController < ApplicationController
     user.contact_information_id = checkContactInformation(user_params).id
 
     if user.save
-      response = { user_data: { user: user.api_friendly,
-                               contact_information: user.contact_information.api_friendly,
-                               address: user.contact_information.address.api_friendly,
-                               address_object: user.contact_information.address } }
-      render json: response, status: :created, location: response
+      render json: user.serialize, status: :created, location: user.serialize
     else
       render json: { error: user.errors }, status: :unprocessable_entity
     end
