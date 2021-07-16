@@ -8,16 +8,22 @@ class ClientsController < ApplicationController
     all_clients = Client.eager_load(:contact_information)
 
     clients = all_clients.map do |client|
-      { client_data: { contact_information: client.contact_information.api_friendly,
-                      address: client.contact_information.address.api_friendly } }
+      { client_data: {
+        client: client,
+        contact_information: client.contact_information.api_friendly,
+        address: client.contact_information.address.api_friendly,
+      } }
     end
     render json: clients
   end
 
   # GET /clients/1
   def show
-    client = { client_data: { contact_information: @client.contact_information.api_friendly,
-                             address: @client.contact_information.address.api_friendly } }
+    client = { client_data: {
+      client: @client,
+      contact_information: @client.contact_information.api_friendly,
+      address: @client.contact_information.address.api_friendly,
+    } }
     render json: client
   end
 
