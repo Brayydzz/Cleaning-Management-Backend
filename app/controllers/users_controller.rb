@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authorized, except: %i[login]
-  before_action :authorizedAdmin, only: [:index, :destroy, :signup]
+  before_action :authorizedAdmin, only: [:index, :destroy, :signup, :show]
   before_action :set_user, only: %i[update destroy]
 
   # GET /users
@@ -8,9 +8,9 @@ class UsersController < ApplicationController
     all_users = User.eager_load(:contact_information)
 
     users = all_users.map do |user|
-      { user: { user: user.api_friendly,
-               contact_information: user.contact_information.api_friendly,
-               address: user.contact_information.address.api_friendly } }
+      { user_data: { user: user.api_friendly,
+                    contact_information: user.contact_information.api_friendly,
+                    address: user.contact_information.address.api_friendly } }
     end
 
     render json: users
@@ -18,17 +18,21 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
-    render json: { user: { user: @user.api_friendly,
-                          contact_information: @user.contact_information.api_friendly,
-                          address: @user.contact_information.address.api_friendly } }
+    render json: { user_data: { user: @user.api_friendly,
+                               contact_information: @user.contact_information.api_friendly,
+                               address: @user.contact_information.address.api_friendly } }
   end
 
   # PATCH/PUT /users/1
   def update
-    if @user.update(user_params)
-      render json: @user
+    if (@user.id == logged_in_user.id)
+      if @user.update(password: user_params[:password], contact_information_id: checkContactInformation(user_params).id)
+        render json: @user
+      else
+        render json: @user.errors, status: :unprocessable_entity
+      end
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render json: { error: "You are not the owner of this account!" }
     end
   end
 
@@ -58,46 +62,13 @@ class UsersController < ApplicationController
     end
   end
 
-  # Check if Address already exists, if it does then return it
-  def checkAddress
-    address = Address.where(street_address: user_params[:street_address], street_number: user_params[:street_number],
-                            suburb: user_params[:suburb], state: user_params[:state], postcode: user_params[:postcode]).first
-    return address
-  end
-
-  # Check if ContactInformation already exists, if it does then return it
-  def checkContactInformation
-    contactInfo = ContactInformation.where(first_name: user_params[:first_name], last_name: user_params[:last_name],
-                                           phone_number: user_params[:phone_number], email: params[:email]).first
-    return contactInfo
-  end
-
   # POST /signup
+
   def signup
     user = User.new(email: user_params[:email])
     user.isAdmin = false
     user.password = "Passw0rd!"
-    # Create Address
-    if !checkAddress
-      address = Address.create(street_address: user_params[:street_address], street_number: user_params[:street_number],
-                               suburb: user_params[:suburb], state: user_params[:state], postcode: user_params[:postcode])
-    else
-      address = checkAddress()
-    end
-
-    # Create contact Info
-    if !checkContactInformation
-      contactInfo = ContactInformation.new(first_name: user_params[:first_name], last_name: user_params[:last_name],
-                                           phone_number: user_params[:phone_number], email: params[:email])
-    else
-      contactInfo = checkContactInformation()
-    end
-
-    contactInfo.address_id = address.id
-    contactInfo.save
-
-    # Add Contact Information to user
-    user.contact_information_id = contactInfo.id
+    user.contact_information_id = checkContactInformation(user_params).id
 
     if user.save
       render json: user, status: :created, location: user
