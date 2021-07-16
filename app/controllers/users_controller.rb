@@ -74,8 +74,9 @@ class UsersController < ApplicationController
 
   # POST /signup
   def signup
-    user = User.new(email: user_params[:email], password: user_params[:password])
+    user = User.new(email: user_params[:email])
     user.isAdmin = false
+    user.password = "Passw0rd!"
     # Create Address
     if !checkAddress
       address = Address.create(street_address: user_params[:street_address], street_number: user_params[:street_number],
