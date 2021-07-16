@@ -10,4 +10,11 @@ class User < ApplicationRecord
              id: id, email: email, is_admin: isAdmin,
            }
   end
+
+  def serialize
+    { user_data: { user: self.api_friendly,
+                  contact_information: self.contact_information.api_friendly,
+                  address: self.contact_information.address.api_friendly,
+                  address_object: self.contact_information.address } }
+  end
 end
