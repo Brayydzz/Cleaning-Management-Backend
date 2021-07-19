@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   belongs_to :contact_information
+  has_many :jobs
   has_secure_password
   validates :email, presence: true
   validates :email, uniqueness: true

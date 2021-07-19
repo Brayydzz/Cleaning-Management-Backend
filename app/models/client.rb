@@ -1,5 +1,6 @@
 class Client < ApplicationRecord
   belongs_to :contact_information
+  has_many :jobs
 
   def serialize
     { client_data: {
