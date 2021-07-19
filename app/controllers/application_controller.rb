@@ -41,11 +41,9 @@ class ApplicationController < ActionController::API
   def checkAddress(params)
     address = Address.where(street_address: params[:street_address], street_number: params[:street_number],
                             suburb: params[:suburb], state: params[:state], postcode: params[:postcode]).first
-    if !address
-      address = Address.create(street_address: params[:street_address], street_number: params[:street_number],
+    address ||= Address.create(street_address: params[:street_address], street_number: params[:street_number],
                                suburb: params[:suburb], state: params[:state], postcode: params[:postcode])
-    end
-    return address
+    address
   end
 
   # Check if ContactInformation already exists, if it does then return it
@@ -53,12 +51,10 @@ class ApplicationController < ActionController::API
     contactInfo = ContactInformation.where(first_name: params[:first_name], last_name: params[:last_name],
                                            phone_number: params[:phone_number], email: params[:email]).first
 
-    if !contactInfo
-      contactInfo = ContactInformation.new(first_name: params[:first_name], last_name: params[:last_name],
+    contactInfo ||= ContactInformation.new(first_name: params[:first_name], last_name: params[:last_name],
                                            phone_number: params[:phone_number], email: params[:email])
-    end
     contactInfo.address_id = checkAddress(params).id
     contactInfo.save
-    return contactInfo
+    contactInfo
   end
 end

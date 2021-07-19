@@ -1,7 +1,7 @@
 class Address < ApplicationRecord
   has_many :contact_information
 
-  validates :street_address, :street_number, :postcode, :suburb, :state, :postcode, presence: true
+  validates :street_address, :street_number, :postcode, :suburb, :state, presence: true
 
   def api_friendly
     if unit_number
