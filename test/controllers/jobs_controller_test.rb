@@ -12,7 +12,7 @@ class JobsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create job" do
     assert_difference('Job.count') do
-      post jobs_url, params: { job: { address_id: @job.address_id, client_id: @job.client_id, due_date: @job.due_date, job_type_id: @job.job_type_id, reoccuring: @job.reoccuring, reoccuring_length: @job.reoccuring_length, time_in: @job.time_in, time_out: @job.time_out, user_id: @job.user_id } }, as: :json
+      post jobs_url, params: { job: { address_id: @job.address_id, client_id: @job.client_id, due_date: @job.due_date, service_type_id: @job.service_type_id, reoccuring: @job.reoccuring, reoccuring_length: @job.reoccuring_length, time_in: @job.time_in, time_out: @job.time_out, user_id: @job.user_id } }, as: :json
     end
 
     assert_response 201
@@ -24,7 +24,7 @@ class JobsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update job" do
-    patch job_url(@job), params: { job: { address_id: @job.address_id, client_id: @job.client_id, due_date: @job.due_date, job_type_id: @job.job_type_id, reoccuring: @job.reoccuring, reoccuring_length: @job.reoccuring_length, time_in: @job.time_in, time_out: @job.time_out, user_id: @job.user_id } }, as: :json
+    patch job_url(@job), params: { job: { address_id: @job.address_id, client_id: @job.client_id, due_date: @job.due_date, service_type_id: @job.service_type_id, reoccuring: @job.reoccuring, reoccuring_length: @job.reoccuring_length, time_in: @job.time_in, time_out: @job.time_out, user_id: @job.user_id } }, as: :json
     assert_response 200
   end
 
