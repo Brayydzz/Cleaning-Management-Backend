@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_19_052927) do
+ActiveRecord::Schema.define(version: 2021_07_19_061808) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,15 @@ ActiveRecord::Schema.define(version: 2021_07_19_052927) do
     t.string "postcode", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "availables", force: :cascade do |t|
+    t.date "day"
+    t.bigint "user_id", null: false
+    t.string "freedom"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_availables_on_user_id"
   end
 
   create_table "bookings", force: :cascade do |t|
@@ -91,6 +100,7 @@ ActiveRecord::Schema.define(version: 2021_07_19_052927) do
     t.index ["contact_information_id"], name: "index_users_on_contact_information_id"
   end
 
+  add_foreign_key "availables", "users"
   add_foreign_key "bookings", "service_types"
   add_foreign_key "clients", "contact_informations"
   add_foreign_key "contact_informations", "addresses"

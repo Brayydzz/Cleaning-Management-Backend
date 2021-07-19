@@ -58,6 +58,7 @@ service3.bookings.create(first_name: "Seymour", last_name: "Butz", email: "seymo
 client1 = Client.create(contact_information_id: contactInfo.id)
 
 current_time = Time.now.to_f * 1000
+puts current_time
 job1 = Job.create(address_id: address1.id, service_type_id: service1.id, due_date: current_time, client_id: client1.id, reoccuring: true, reoccuring_length: 7, user_id: user2.id)
 job2 = Job.create(address_id: address1.id, service_type_id: service1.id, due_date: current_time, client_id: client1.id, reoccuring: false)
 

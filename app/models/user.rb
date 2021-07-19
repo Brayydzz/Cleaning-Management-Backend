@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   belongs_to :contact_information
   has_many :jobs
+  has_many :availables
   has_secure_password
   validates :email, presence: true
   validates :email, uniqueness: true
@@ -16,6 +17,7 @@ class User < ApplicationRecord
     { user_data: { user: self.api_friendly,
                   contact_information: self.contact_information.api_friendly,
                   address: self.contact_information.address.api_friendly,
-                  address_object: self.contact_information.address } }
+                  address_object: self.contact_information.address,
+                  availables: self.availables } }
   end
 end
