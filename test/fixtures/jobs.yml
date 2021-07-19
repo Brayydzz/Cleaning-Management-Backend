@@ -2,7 +2,7 @@
 
 one:
   address: one
-  job_type: one
+  service_type: one
   due_date: 2021-07-18 19:17:31
   client: one
   time_in: 2021-07-18 19:17:31
@@ -13,7 +13,7 @@ one:
 
 two:
   address: two
-  job_type: two
+  service_type: two
   due_date: 2021-07-18 19:17:31
   client: two
   time_in: 2021-07-18 19:17:31
