@@ -6,12 +6,12 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+Job.destroy_all
 Client.destroy_all
+User.destroy_all
 ContactInformation.destroy_all
 Address.destroy_all
 ServiceType.destroy_all
-User.destroy_all
-Job.destroy_all
 
 address1 = Address.create(street_number: "1", street_address: "Fake rd", suburb: "Brisbane", state: "QLD",
                           postcode: "4000")
@@ -57,7 +57,9 @@ service3.bookings.create(first_name: "Seymour", last_name: "Butz", email: "seymo
 
 client1 = Client.create(contact_information_id: contactInfo.id)
 
-job1 = Job.create(address_id: address1.id, service_type_id: service1.id, due_date: DateTime.now, client_id: client1.id, reoccuring: true, reoccuring_length: 7, user_id: user2.id)
+current_time = Time.now.to_f * 1000
+job1 = Job.create(address_id: address1.id, service_type_id: service1.id, due_date: current_time, client_id: client1.id, reoccuring: true, reoccuring_length: 7, user_id: user2.id)
+job2 = Job.create(address_id: address1.id, service_type_id: service1.id, due_date: current_time, client_id: client1.id, reoccuring: false)
 
 # booking
 # first_name: string
