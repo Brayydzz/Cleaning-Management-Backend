@@ -22,7 +22,6 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   def update
     if (@user.id == logged_in_user.id)
-      puts user_params[:password], " **************** "
       if (user_params[:password])
         if @user.update(password: user_params[:password], contact_information_id: checkContactInformation(user_params).id)
           render json: @user.serialize
@@ -37,7 +36,7 @@ class UsersController < ApplicationController
         end
       end
     else
-      render json: { error: "You are not the owner of this account!" }
+      render json: { error: "You are not the owner of this account!" }, status: :unauthorized
     end
   end
 
