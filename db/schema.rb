@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_16_005529) do
+ActiveRecord::Schema.define(version: 2021_07_18_091731) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,6 +56,24 @@ ActiveRecord::Schema.define(version: 2021_07_16_005529) do
     t.index ["address_id"], name: "index_contact_informations_on_address_id"
   end
 
+  create_table "jobs", force: :cascade do |t|
+    t.bigint "address_id", null: false
+    t.bigint "service_type_id", null: false
+    t.datetime "due_date"
+    t.bigint "client_id", null: false
+    t.datetime "time_in"
+    t.datetime "time_out"
+    t.boolean "reoccuring"
+    t.integer "reoccuring_length"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["address_id"], name: "index_jobs_on_address_id"
+    t.index ["client_id"], name: "index_jobs_on_client_id"
+    t.index ["service_type_id"], name: "index_jobs_on_service_type_id"
+    t.index ["user_id"], name: "index_jobs_on_user_id"
+  end
+
   create_table "service_types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
@@ -76,5 +94,9 @@ ActiveRecord::Schema.define(version: 2021_07_16_005529) do
   add_foreign_key "bookings", "service_types"
   add_foreign_key "clients", "contact_informations"
   add_foreign_key "contact_informations", "addresses"
+  add_foreign_key "jobs", "addresses"
+  add_foreign_key "jobs", "clients"
+  add_foreign_key "jobs", "service_types"
+  add_foreign_key "jobs", "users"
   add_foreign_key "users", "contact_informations"
 end
