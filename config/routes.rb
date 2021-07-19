@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :addresses
   resources :bookings, only: [:index, :create, :destroy]
   resources :service_types, only: [:index]
+  resources :availables, only: [:update, :destroy]
 
   post "/signup", to: "users#signup"
   post "/login", to: "users#login"
@@ -13,6 +14,9 @@ Rails.application.routes.draw do
   #Check in and out of jobs
   post "/jobs/:id/checkin", to: "jobs#job_check_in"
   post "/jobs/:id/checkout", to: "jobs#job_check_out"
+  # Assign Employees
   post "/jobs/:id/assignuser", to: "jobs#job_assign_user"
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  # Post new Available
+  post "/users/:id/available", to: "available#create"
+  get "/users/:id/available", to: "available#show"
 end
