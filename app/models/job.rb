@@ -3,6 +3,7 @@ class Job < ApplicationRecord
   belongs_to :service_type
   belongs_to :client
   belongs_to :user, optional: true
+  has_many :notes
 
   def api_friendly
     return {
@@ -17,6 +18,7 @@ class Job < ApplicationRecord
                  user: self.user ? self.user.serialize : "User unassigned",
                  service_type: self.service_type,
                  client: self.client.serialize,
-                 address_object: self.address } }
+                 address_object: self.address,
+                 notes: self.notes } }
   end
 end

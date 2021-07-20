@@ -39,6 +39,15 @@ class ClientsController < ApplicationController
     end
   end
 
+  # POST /clients/:id/notes
+  def create_notes
+    if @client.notes.create(note: client_params[:note])
+      render json: @client.serialize
+    else
+      render json: @client.errors, status: :unprocessable_entity
+    end
+  end
+
   # DELETE /clients/1
   def destroy
     @client.destroy
@@ -54,6 +63,6 @@ class ClientsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def client_params
     params.permit(:email, :first_name, :last_name, :phone_number, :street_number, :street_address,
-                  :unit_number, :suburb, :state, :postcode)
+                  :unit_number, :suburb, :state, :postcode, :note)
   end
 end

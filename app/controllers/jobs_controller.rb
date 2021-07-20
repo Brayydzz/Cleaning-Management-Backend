@@ -1,5 +1,5 @@
 class JobsController < ApplicationController
-  before_action :set_job, only: [:show, :update, :destroy, :job_check_in, :job_check_out, :job_assign_user]
+  before_action :set_job, only: [:show, :update, :destroy, :job_check_in, :job_check_out, :job_assign_user, :create_notes]
 
   # GET /jobs
   def index
@@ -19,7 +19,7 @@ class JobsController < ApplicationController
 
   # POST /jobs
   def create
-    @job = Job.new(service_type_id: job_params[:service_type_id], due_date: job_params[:due_date], client_id: job_params[:client_id], reoccuring: job_params[:reoccuring], reoccuring_length: [:reoccuring_length])
+    @job = Job.new(service_type_id: job_params[:service_type_id], due_date: job_params[:due_date], client_id: job_params[:client_id], reoccuring: job_params[:reoccuring], reoccuring_length: job_params[:reoccuring_length], user_id: job_params[:user_id])
     @job.address_id = checkAddress(job_params).id
 
     if @job.save
@@ -38,6 +38,7 @@ class JobsController < ApplicationController
     end
   end
 
+  #POST /jobs/:id/checkin
   def job_check_in
     if @job.update_attribute(:time_in, job_params[:time_in])
       render json: @job.serialize
@@ -46,6 +47,7 @@ class JobsController < ApplicationController
     end
   end
 
+  # POST /jobs/:id/checkout
   def job_check_out
     if @job.update_attribute(:time_out, job_params[:time_out])
       render json: @job.serialize
@@ -54,8 +56,17 @@ class JobsController < ApplicationController
     end
   end
 
-  def job_assign_user
-    if @job.update_attribute(:user_id, job_params[:user_id])
+  # def job_assign_user
+  #   if @job.update_attribute(:user_id, job_params[:user_id])
+  #     render json: @job.serialize
+  #   else
+  #     render json: @job.errors, status: :unprocessable_entity
+  #   end
+  # end
+
+  # POST /jobs/:id/notes
+  def create_notes
+    if @job.notes.create(note: job_params[:note])
       render json: @job.serialize
     else
       render json: @job.errors, status: :unprocessable_entity
@@ -77,6 +88,6 @@ class JobsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def job_params
     params.permit(:id, :address_id, :service_type_id, :due_date, :client_id, :time_in, :time_out, :reoccuring, :reoccuring_length, :user_id, :street_number, :street_address,
-                  :unit_number, :suburb, :state, :postcode)
+                  :unit_number, :suburb, :state, :postcode, :note)
   end
 end

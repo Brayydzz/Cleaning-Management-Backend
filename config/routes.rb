@@ -19,4 +19,6 @@ Rails.application.routes.draw do
   # Post new Available
   post "/users/:id/available", to: "available#create"
   get "/users/:id/available", to: "available#show"
+  # Add notes to jobs
+  post "/jobs/:id/notes", to: "jobs#create_notes"
 end
