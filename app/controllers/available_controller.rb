@@ -1,6 +1,7 @@
 class AvailableController < ApplicationController
   @@freedom_string = "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
   before_action :set_available, only: %i[update destroy]
+  before_action :authorized
 
   # POST /users/:userid/available
   def create
