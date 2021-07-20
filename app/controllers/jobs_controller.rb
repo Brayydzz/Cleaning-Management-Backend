@@ -1,5 +1,7 @@
 class JobsController < ApplicationController
   before_action :set_job, only: [:show, :update, :destroy, :job_check_in, :job_check_out, :job_assign_user, :create_notes]
+  before_action :authorized
+  before_action :authorizedAdmin, only: [:create, :destroy, :update]
 
   # GET /jobs
   def index
