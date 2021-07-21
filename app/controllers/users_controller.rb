@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authorized, except: %i[login]
-  before_action :authorizedAdmin, only: [:index, :destroy, :signup, :show]
+  before_action :authorizedAdmin, only: [:destroy, :signup]
   before_action :set_user, only: %i[update destroy]
 
   # GET /users

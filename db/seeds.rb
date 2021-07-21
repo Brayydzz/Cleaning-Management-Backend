@@ -5,11 +5,12 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-
-Job.destroy_all
+Note.destroy_all
 Client.destroy_all
 User.destroy_all
 ContactInformation.destroy_all
+Job.destroy_all
+Available.destroy_all
 Address.destroy_all
 ServiceType.destroy_all
 
@@ -17,13 +18,13 @@ address1 = Address.create(street_number: "1", street_address: "Fake rd", suburb:
                           postcode: "4000")
 
 address2 = Address.create(street_number: "123", street_address: "Fake Street", suburb: "Springfield", state: "QLD",
-postcode: "1234")
+                          postcode: "1234")
 
 contactInfo = ContactInformation.create(phone_number: "04987654", email: "blah@blah.com", first_name: "Bob",
                                         last_name: "Jones", address_id: address1.id)
 
 contactInfo2 = ContactInformation.create(phone_number: "0412345568", email: "Brenda@Song.com", first_name: "Brenda",
-last_name: "Song", address_id: address2.id)
+                                         last_name: "Song", address_id: address2.id)
 
 user1 = User.create(email: "a@b.com", password: "password", isAdmin: true, contact_information_id: contactInfo.id)
 user2 = User.create(email: "a@b.c", password: "password", isAdmin: false, contact_information_id: contactInfo2.id)
@@ -68,10 +69,10 @@ current_time = Time.now.to_f * 1000
 job1 = Job.create(address_id: address1.id, service_type_id: service1.id, due_date: current_time, client_id: client1.id, reoccuring: true, reoccuring_length: 7, user_id: user2.id)
 job2 = Job.create(address_id: address2.id, service_type_id: service1.id, due_date: current_time, client_id: client1.id, reoccuring: false, user_id: user1.id)
 
-# booking
-# first_name: string
-# last_name: string
-# email: string
-# body: string
-# service_type: int
-# phone_number: string
+# notes
+
+client1.notes.create(note: "Good person, pays on time")
+client2.notes.create(note: "Bad person, doesn't pays on time")
+
+job1.notes.create(note: "Easy Job")
+job2.notes.create(note: "Hard job")
