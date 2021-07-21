@@ -5,7 +5,7 @@ class JobsController < ApplicationController
 
   # GET /jobs
   def index
-    all_jobs = Job.eager_load(:address)
+    all_jobs = Job.eager_load(:address).order(due_date: :desc)
 
     jobs = all_jobs.map do |job|
       job.serialize
@@ -51,6 +51,20 @@ class JobsController < ApplicationController
 
   # POST /jobs/:id/checkout
   def job_check_out
+    # Create new Job based on old job is recurring
+    if @job.reoccuring
+      @clone = @job.dup
+      # puts @clone.due_date, "*******************************"
+      # puts DateTime.strptime((@clone.due_date.to_f + (@clone.reoccuring_length.to_f * 24 * 60 * 60 * 1000)).to_s, "%s").to_time.to_f, "*******************************"
+      # puts @clone.reoccuring_length, "*******************************"
+      # puts (@clone.reoccuring_length.to_f * 86400).to_s, "*******************************"
+      # puts @clone.reoccuring_length, "*******************************"
+
+      @clone.time_in = nil
+      @clone.due_date = DateTime.strptime((@clone.due_date.to_f + (@clone.reoccuring_length.to_f * 24 * 60 * 60 * 1000)).to_s, "%s").to_time.to_f
+      @clone.save!
+    end
+
     if @job.update_attribute(:time_out, job_params[:time_out])
       render json: @job.serialize
     else
