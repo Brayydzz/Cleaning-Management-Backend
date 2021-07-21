@@ -17,8 +17,8 @@ Rails.application.routes.draw do
   # Assign Employees
   post "/jobs/:id/assignuser", to: "jobs#job_assign_user"
   # Post new Available
-  post "/users/:id/available", to: "available#create"
-  get "/users/:id/available", to: "available#show"
+  post "/users/:id/available", to: "availables#create"
+  get "/users/:id/available", to: "availables#show"
   # Add notes to jobs
   post "/jobs/:id/notes", to: "jobs#create_notes"
 end

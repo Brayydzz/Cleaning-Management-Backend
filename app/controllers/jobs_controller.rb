@@ -21,8 +21,8 @@ class JobsController < ApplicationController
 
   # POST /jobs
   def create
-    @job = Job.new(service_type_id: job_params[:service_type_id], due_date: job_params[:due_date], client_id: job_params[:client_id], reoccuring: job_params[:reoccuring], reoccuring_length: job_params[:reoccuring_length], user_id: job_params[:user_id])
-    @job.address_id = checkAddress(job_params).id
+    @job = Job.new(service_type_id: job_params[:service_type_id], due_date: job_params[:due_date], client_id: job_params[:client_id], reoccuring: job_params[:reoccuring], reoccuring_length: job_params[:reoccuring_length], user_id: job_params[:user_id], address_id: job_params[:address_id])
+    # @job.address_id = checkAddress(job_params).id
 
     if @job.save
       render json: @job.serialize, status: :created, location: @job

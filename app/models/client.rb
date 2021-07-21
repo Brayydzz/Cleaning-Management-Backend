@@ -1,7 +1,7 @@
 class Client < ApplicationRecord
   belongs_to :contact_information
-  has_many :jobs
-  has_many :notes
+  has_many :jobs, dependent: :destroy
+  has_many :notes, dependent: :destroy
 
   def serialize
     { client_data: {

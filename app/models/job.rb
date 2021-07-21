@@ -3,7 +3,7 @@ class Job < ApplicationRecord
   belongs_to :service_type
   belongs_to :client
   belongs_to :user, optional: true
-  has_many :notes
+  has_many :notes, dependent: :destroy
 
   def api_friendly
     return {
