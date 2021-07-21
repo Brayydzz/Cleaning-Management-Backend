@@ -43,6 +43,7 @@ class UsersController < ApplicationController
   # DELETE /users/1
   def destroy
     @user.destroy
+    render json: { message: "Employee Delete" }
   end
 
   # POST /login
