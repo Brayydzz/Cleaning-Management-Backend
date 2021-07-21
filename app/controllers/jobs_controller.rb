@@ -1,5 +1,5 @@
 class JobsController < ApplicationController
-  before_action :set_job, only: [:show, :update, :destroy, :job_check_in, :job_check_out, :job_assign_user, :create_notes]
+  before_action :set_job, only: [:show, :update, :destroy, :job_check_in, :job_check_out, :job_assign_user, :create_notes, :job_upload_images]
   before_action :authorized
   before_action :authorizedAdmin, only: [:create, :destroy, :update]
 
@@ -66,6 +66,15 @@ class JobsController < ApplicationController
   #   end
   # end
 
+  # POST /jobs/:id/images
+  def job_upload_images
+    params[:pictures].each do |k, v|
+      image = Cloudinary::Uploader.upload(params[:pictures][k])
+      item = @job.pictures.create!(url: image["url"], public_id: image["public_id"])
+    end
+    render json: @job.serialize
+  end
+
   # POST /jobs/:id/notes
   def create_notes
     if @job.notes.create(note: job_params[:note])
@@ -90,6 +99,6 @@ class JobsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def job_params
     params.permit(:id, :address_id, :service_type_id, :due_date, :client_id, :time_in, :time_out, :reoccuring, :reoccuring_length, :user_id, :street_number, :street_address,
-                  :unit_number, :suburb, :state, :postcode, :note)
+                  :unit_number, :suburb, :state, :postcode, :note, :pictures)
   end
 end
