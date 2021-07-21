@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   belongs_to :contact_information
   has_many :jobs
-  has_many :availables
+  has_many :availables, dependent: :destroy
   has_secure_password
   validates :email, presence: true
   validates :email, uniqueness: true
