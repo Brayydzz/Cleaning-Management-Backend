@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   # Add notes to jobs
   post "/jobs/:id/notes", to: "jobs#create_notes"
   delete "/notes/:id", to: "notes#destroy"
+  delete "/jobs/:id/notes/:nid", to: "jobs#destroy_note"
   # Add images to jobs
   post "jobs/:id/images", to: "jobs#job_upload_images"
 end

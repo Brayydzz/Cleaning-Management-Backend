@@ -1,5 +1,5 @@
 class JobsController < ApplicationController
-  before_action :set_job, only: [:show, :update, :destroy, :job_check_in, :job_check_out, :job_assign_user, :create_notes, :job_upload_images]
+  before_action :set_job, only: [:show, :update, :destroy, :job_check_in, :job_check_out, :job_assign_user, :create_notes, :job_upload_images, :destroy_note]
   before_action :authorized
   before_action :authorizedAdmin, only: [:create, :destroy, :update]
 
@@ -82,6 +82,12 @@ class JobsController < ApplicationController
     else
       render json: @job.errors, status: :unprocessable_entity
     end
+  end
+
+  # DELETE /jobs/:id/notes/:nid
+  def destroy_note
+    @job.notes.find(params[:nid]).destroy
+    render json: @job.serialize
   end
 
   # DELETE /jobs/1
