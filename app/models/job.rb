@@ -4,6 +4,7 @@ class Job < ApplicationRecord
   belongs_to :client
   belongs_to :user, optional: true
   has_many :notes, dependent: :destroy
+  has_many :pictures, dependent: :destroy
 
   def api_friendly
     return {
@@ -19,6 +20,7 @@ class Job < ApplicationRecord
                  service_type: self.service_type,
                  client: self.client.serialize,
                  address_object: self.address,
-                 notes: self.notes } }
+                 notes: self.notes,
+                 photos: self.pictures } }
   end
 end

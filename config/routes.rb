@@ -21,4 +21,6 @@ Rails.application.routes.draw do
   get "/users/:id/available", to: "availables#show"
   # Add notes to jobs
   post "/jobs/:id/notes", to: "jobs#create_notes"
+  # Add images to jobs
+  post "jobs/:id/images", to: "jobs#job_upload_images"
 end

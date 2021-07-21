@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  url: MyText
+  job: one
+  public_id: MyString
+
+two:
+  url: MyText
+  job: two
+  public_id: MyString
