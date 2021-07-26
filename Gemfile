@@ -44,3 +44,5 @@ gem "jwt", "~> 2.2"
 gem "dotenv", "~> 2.7"
 
 gem "dotenv-rails", "~> 2.7"
+
+gem "cloudinary", "~> 1.20"

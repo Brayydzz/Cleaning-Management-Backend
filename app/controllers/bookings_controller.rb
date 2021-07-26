@@ -1,16 +1,12 @@
 class BookingsController < ApplicationController
   before_action :set_booking, only: %i[show update destroy]
+  before_action :authorizedAdmin, except: [:create]
 
   # GET /bookings
   def index
     @bookings = Booking.all
 
-    render json: @bookings
-  end
-
-  # GET /bookings/1
-  def show
-    render json: @booking
+    render json: @bookings, status: :ok
   end
 
   # POST /bookings
@@ -24,18 +20,10 @@ class BookingsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /bookings/1
-  def update
-    if @booking.update(booking_params)
-      render json: @booking
-    else
-      render json: @booking.errors, status: :unprocessable_entity
-    end
-  end
-
   # DELETE /bookings/1
   def destroy
     @booking.destroy
+    render json: { message: "Deleted booking!" }, status: 204
   end
 
   private

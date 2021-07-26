@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  address: one
+  service_type: one
+  due_date: 2021-07-18 19:17:31
+  client: one
+  time_in: 2021-07-18 19:17:31
+  time_out: 2021-07-18 19:17:31
+  reoccuring: false
+  reoccuring_length: 
+  user: one
+
+two:
+  address: two
+  service_type: two
+  due_date: 2021-07-18 19:17:31
+  client: two
+  time_in: 2021-07-18 19:17:31
+  time_out: 2021-07-18 19:17:31
+  reoccuring: false
+  reoccuring_length: 
+  user: two
