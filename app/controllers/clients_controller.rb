@@ -10,12 +10,12 @@ class ClientsController < ApplicationController
     clients = all_clients.map do |client|
       client.serialize
     end
-    render json: clients
+    render json: clients, status: :ok
   end
 
   # GET /clients/1
   def show
-    render json: @client.serialize
+    render json: @client.serialize, status: :ok
   end
 
   # POST /clients
@@ -33,7 +33,7 @@ class ClientsController < ApplicationController
   # PATCH/PUT /clients/1
   def update
     if @client.update(contact_information_id: checkContactInformation(client_params).id)
-      render json: @client
+      render json: @client, status: :created
     else
       render json: @client.errors, status: :unprocessable_entity
     end
@@ -42,7 +42,7 @@ class ClientsController < ApplicationController
   # POST /clients/:id/notes
   def create_notes
     if @client.notes.create(note: client_params[:note])
-      render json: @client.serialize
+      render json: @client.serialize, status: :created
     else
       render json: @client.errors, status: :unprocessable_entity
     end
@@ -50,7 +50,11 @@ class ClientsController < ApplicationController
 
   # DELETE /clients/1
   def destroy
-    @client.destroy
+    if @client.destroy
+      render json: { message: "Client deleted" }, status: :ok
+    else
+      render json: { error: "Could not delete" }, status: :unprocessable_entity
+    end
   end
 
   private

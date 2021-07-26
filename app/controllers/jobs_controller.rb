@@ -11,12 +11,12 @@ class JobsController < ApplicationController
       job.serialize
     end
 
-    render json: jobs
+    render json: jobs, status: :ok
   end
 
   # GET /jobs/1
   def show
-    render json: @job.serialize
+    render json: @job.serialize, status: :ok
   end
 
   # POST /jobs
@@ -34,7 +34,7 @@ class JobsController < ApplicationController
   # PATCH/PUT /jobs/1
   def update
     if @job.update(service_type_id: job_params[:service_type_id], due_date: job_params[:due_date], client_id: job_params[:client_id], reoccuring: job_params[:reoccuring], reoccuring_length: [:reoccuring_length], address_id: checkAddress(job_params).id)
-      render json: @job.serialize
+      render json: @job.serialize, status: :created
     else
       render json: @job.errors, status: :unprocessable_entity
     end
@@ -43,7 +43,7 @@ class JobsController < ApplicationController
   #POST /jobs/:id/checkin
   def job_check_in
     if @job.update_attribute(:time_in, job_params[:time_in])
-      render json: @job.serialize
+      render json: @job.serialize, status: :created
     else
       render json: @job.errors, status: :unprocessable_entity
     end
@@ -66,19 +66,11 @@ class JobsController < ApplicationController
     end
 
     if @job.update_attribute(:time_out, job_params[:time_out])
-      render json: @job.serialize
+      render json: @job.serialize, status: :created
     else
       render json: @job.errors, status: :unprocessable_entity
     end
   end
-
-  # def job_assign_user
-  #   if @job.update_attribute(:user_id, job_params[:user_id])
-  #     render json: @job.serialize
-  #   else
-  #     render json: @job.errors, status: :unprocessable_entity
-  #   end
-  # end
 
   # POST /jobs/:id/images
   def job_upload_images
@@ -86,13 +78,13 @@ class JobsController < ApplicationController
       image = Cloudinary::Uploader.upload(params[:pictures][k])
       item = @job.pictures.create!(url: image["url"], public_id: image["public_id"])
     end
-    render json: @job.serialize
+    render json: @job.serialize, status: :created
   end
 
   # POST /jobs/:id/notes
   def create_notes
     if @job.notes.create(note: job_params[:note])
-      render json: @job.serialize
+      render json: @job.serialize, status: :created
     else
       render json: @job.errors, status: :unprocessable_entity
     end
@@ -101,12 +93,13 @@ class JobsController < ApplicationController
   # DELETE /jobs/:id/notes/:nid
   def destroy_note
     @job.notes.find(params[:nid]).destroy
-    render json: @job.serialize
+    render json: @job.serialize, status: 204
   end
 
   # DELETE /jobs/1
   def destroy
     @job.destroy
+    render json: { message: "Job destroyed" }, status: 204
   end
 
   private
