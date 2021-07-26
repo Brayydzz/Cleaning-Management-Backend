@@ -11,12 +11,12 @@ class UsersController < ApplicationController
       user.serialize
     end
 
-    render json: users
+    render json: users, status: :ok
   end
 
   # GET /users/1
   def show
-    render json: @user.serialize
+    render json: @user.serialize, status: :ok
   end
 
   # PATCH/PUT /users/1
@@ -24,13 +24,13 @@ class UsersController < ApplicationController
     if (@user.id == logged_in_user.id)
       if (user_params[:password])
         if @user.update(password: user_params[:password], contact_information_id: checkContactInformation(user_params).id)
-          render json: @user.serialize
+          render json: @user.serialize, status: :created
         else
           render json: @user.errors, status: :unprocessable_entity
         end
       else
         if @user.update_attribute(:contact_information_id, checkContactInformation(user_params).id)
-          render json: @user.serialize
+          render json: @user.serialize, status: :created
         else
           render json: @user.errors, status: :unprocessable_entity
         end
@@ -43,7 +43,7 @@ class UsersController < ApplicationController
   # DELETE /users/1
   def destroy
     @user.destroy
-    render json: { message: "Employee Delete" }
+    render json: { message: "Employee Delete" }, status: 204
   end
 
   # POST /login
@@ -60,10 +60,10 @@ class UsersController < ApplicationController
     if user.authenticate(user_params[:password])
       payload = { first_name: user.contact_information[:first_name], last_name: user.contact_information[:last_name], email: user[:email], user_id: user[:id], isAdmin: user[:isAdmin] }
       token = JWT.encode payload, "my$ecretK3y", "HS256"
-      render json: { token: token }
+      render json: { token: token }, status: :ok
       nil
     else
-      render json: { error: "Username and password don't match" }
+      render json: { error: "Username and password don't match" }, status: :unauthorized
     end
   end
 

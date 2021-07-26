@@ -6,7 +6,7 @@ class BookingsController < ApplicationController
   def index
     @bookings = Booking.all
 
-    render json: @bookings
+    render json: @bookings, status: :ok
   end
 
   # POST /bookings
@@ -23,7 +23,7 @@ class BookingsController < ApplicationController
   # DELETE /bookings/1
   def destroy
     @booking.destroy
-    render json: { message: "Deleted booking!" }
+    render json: { message: "Deleted booking!" }, status: 204
   end
 
   private

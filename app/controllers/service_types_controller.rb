@@ -5,6 +5,6 @@ class ServiceTypesController < ApplicationController
   def index
     @service_types = ServiceType.all
 
-    render json: @service_types
+    render json: @service_types, status: :ok
   end
 end

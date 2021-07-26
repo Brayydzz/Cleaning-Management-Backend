@@ -12,19 +12,19 @@ class AvailablesController < ApplicationController
     end
     # Delete out of date records
     Available.where("day <= ?", Time.now - 1.day).destroy_all
-    render json: created
+    render json: created, status: :created
   end
 
   # GET /users/:userid/available
   def show
     availables = User.find(params[:id]).availables
-    render json: availables
+    render json: availables, status: :ok
   end
 
   # PATCH/PUT /available/:id
   def update
     if @available.update_attribute(:freedom, available_params[:freedom])
-      render json: @user.serialize
+      render json: @user.serialize, status: :created
     else
       render json: @user.errors, status: :unprocessable_entity
     end
@@ -33,6 +33,7 @@ class AvailablesController < ApplicationController
   # DELETE /available/:id
   def destroy
     @available.destroy
+    render json: { message: "Available destroyed" }, status: 204
   end
 
   private
