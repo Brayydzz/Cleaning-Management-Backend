@@ -96,12 +96,6 @@ class JobsController < ApplicationController
     render json: @job.serialize, status: :ok
   end
 
-  # DELETE /jobs/1
-  def destroy
-    @job.destroy
-    render json: { message: "Job destroyed" }, status: 204
-  end
-
   private
 
   # Use callbacks to share common setup or constraints between actions.
