@@ -3,7 +3,7 @@ class ApplicationController < ActionController::API
     token = request.authorization.split[1]
     if token
       begin
-        JWT.decode(token, "my$ecretK3y", true, algorithm: "HS256")
+        return JWT.decode(token, "my$ecretK3y", true, algorithm: "HS256")
       rescue JWT::DecodeError
         nil
       end

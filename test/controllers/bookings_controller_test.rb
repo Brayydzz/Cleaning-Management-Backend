@@ -6,12 +6,12 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get index" do
-    get bookings_url, as: :json
+    get bookings_url, headers: { Authorization: "Bearer " + ENV["TESTING_TOKEN"] }, as: :json
     assert_response :success
   end
 
   test "should create booking" do
-    assert_difference('Booking.count') do
+    assert_difference("Booking.count") do
       post bookings_url,
            params: { booking: { body: @booking.body, email: @booking.email, first_name: @booking.first_name, last_name: @booking.last_name, phone_number: @booking.phone_number, service_type_id: @booking.service_type_id } }, as: :json
     end
@@ -20,19 +20,13 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should show booking" do
-    get booking_url(@booking), as: :json
+    get booking_url(@booking), headers: { Authorization: "Bearer " + ENV["TESTING_TOKEN"] }, as: :json
     assert_response :success
   end
 
-  test "should update booking" do
-    patch booking_url(@booking),
-          params: { booking: { body: @booking.body, email: @booking.email, first_name: @booking.first_name, last_name: @booking.last_name, phone_number: @booking.phone_number, service_type_id: @booking.service_type_id } }, as: :json
-    assert_response 200
-  end
-
   test "should destroy booking" do
-    assert_difference('Booking.count', -1) do
-      delete booking_url(@booking), as: :json
+    assert_difference("Booking.count", -1) do
+      delete booking_url(@booking), headers: { Authorization: "Bearer " + ENV["TESTING_TOKEN"] }, as: :json
     end
 
     assert_response 204
