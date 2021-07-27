@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :authorized, except: %i[login]
   before_action :authorizedAdmin, only: [:destroy, :signup]
-  before_action :set_user, only: %i[update destroy]
+  before_action :set_user, only: %i[update destroy show]
 
   # GET /users
   def index
@@ -41,10 +41,10 @@ class UsersController < ApplicationController
   end
 
   # DELETE /users/1
-  def destroy
-    @user.destroy
-    render json: { message: "Employee Delete" }, status: 204
-  end
+  # def destroy
+  #   @user.destroy
+  #   render json: { message: "Employee Delete" }, status: 204
+  # end
 
   # POST /login
   def login

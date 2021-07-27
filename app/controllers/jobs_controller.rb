@@ -93,13 +93,7 @@ class JobsController < ApplicationController
   # DELETE /jobs/:id/notes/:nid
   def destroy_note
     @job.notes.find(params[:nid]).destroy
-    render json: @job.serialize, status: 204
-  end
-
-  # DELETE /jobs/1
-  def destroy
-    @job.destroy
-    render json: { message: "Job destroyed" }, status: 204
+    render json: @job.serialize, status: :ok
   end
 
   private
